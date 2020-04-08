@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:authentication/components/notification.dart';
+import 'package:authentication/services/signin_with_email_method_services/register_with_email_service.dart';
 import 'package:flutter/material.dart';
 
 class RegisterWithEmail extends StatefulWidget {
@@ -16,21 +15,6 @@ class RegisterWithEmailState extends State<RegisterWithEmail> {
     var emailTextController = TextEditingController();
     var passwordTextController = TextEditingController();
     var repasswordTextController = TextEditingController();
-
-    Future<bool> register(
-        {@required email, @required password, @required repassword}) {
-      FirebaseAuth _auth = FirebaseAuth.instance;
-      return _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((data) {
-        print("Registation Success");
-        print(data.user.uid);
-        return true;
-      }).catchError((e) {
-        print("Error: " + e);
-        return false;
-      });
-    }
 
     return Scaffold(
         appBar: AppBar(
@@ -93,19 +77,34 @@ class RegisterWithEmailState extends State<RegisterWithEmail> {
                               if (emailTextController.text == "" ||
                                   passwordTextController.text == "" ||
                                   repasswordTextController.text == "") {
-                                return null;
+                                return showMessageBox(context,
+                                    title: "Failed",
+                                    content:
+                                        "Please fill in all of the information before start the registation");
                               }
                               if (passwordTextController.text !=
                                   repasswordTextController.text) {
-                                return null;
+                                return showMessageBox(context,
+                                    title: "Failed",
+                                    content:
+                                        "Your password and re-password doesn't match");
                               }
-                              return await register(
+                              if (await registerWithEmail(
                                 email: emailTextController.text,
                                 password: passwordTextController.text,
                                 repassword: repasswordTextController.text,
-                              )
-                                  ? print("")
-                                  : print("");
+                              )) {
+                                Navigator.pop(context);
+                                showMessageBox(context,
+                                    title: "Success",
+                                    content:
+                                        "Successfully to register your account with this email address.");
+                              } else {
+                                showMessageBox(context,
+                                    title: "Failed",
+                                    content:
+                                        "An error occurred while registering your account. Please see the output log and try again");
+                              }
                             },
                           ),
                         ),

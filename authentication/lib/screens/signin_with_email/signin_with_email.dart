@@ -1,7 +1,7 @@
+import 'package:authentication/components/notification.dart';
 import 'package:authentication/screens/signin_with_email/register_with_email.dart';
+import 'package:authentication/services/signin_with_email_method_services/signin_with_email_service.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 class SigninWithEmail extends StatefulWidget {
   SigninWithEmail({Key key}) : super(key: key);
@@ -13,25 +13,6 @@ class SigninWithEmail extends StatefulWidget {
 class SigninWithEmailState extends State<SigninWithEmail> {
   var emailTextController = TextEditingController();
   var passwordTextController = TextEditingController();
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<void> signIn(
-      {@required String email, @required String password}) async {
-    if (email == "" || password == "") {
-      print("Null");
-      return null;
-    }
-    try {
-      var result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      print(result.user);
-    } on PlatformException catch (e) {
-      return e.code == "ERROR_USER_NOT_FOUND"
-          ? print("User not found")
-          : print("Unknown error: " + e.details);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +68,29 @@ class SigninWithEmailState extends State<SigninWithEmail> {
                         child: RaisedButton(
                           color: Colors.amberAccent,
                           child: Text("Sign-in"),
-                          onPressed: () {
-                            signIn(
+                          onPressed: () async {
+                            if (emailTextController.text == "" ||
+                                passwordTextController.text == "") {
+                              return showMessageBox(context,
+                                  title: "Failed",
+                                  content:
+                                      "Please fill in all of the information");
+                            }
+
+                            if (await signInWithEmail(context,
                                 email: emailTextController.text,
-                                password: passwordTextController.text);
+                                password: passwordTextController.text)) {
+                              print("Signin Success");
+                              showMessageBox(context,
+                                  title: "Successfully to sign you in",
+                                  content:
+                                      "Welcome to Firebase, Happy Developing!");
+                            } else {
+                              return showMessageBox(context,
+                                  title: "Failed",
+                                  content:
+                                      "We can't sign you in with these credential. Please see the output log and try again.");
+                            }
                           },
                         ),
                       ),
