@@ -1,15 +1,24 @@
+import 'dart:io' show Platform;
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:authentication/components/notification.dart';
 import 'package:authentication/components/signin_button.dart';
 import 'package:authentication/screens/main_page.dart';
 import 'package:authentication/screens/signin_with_email/signin_with_email.dart';
+import 'package:authentication/services/signin_with_apple_services/signin_with_apple_services.dart';
 import 'package:authentication/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:apple_sign_in/apple_sign_in_button.dart';
 
-class SigninPage extends StatelessWidget {
-  const SigninPage({Key key}) : super(key: key);
+class SigninPage extends StatefulWidget {
+  SigninPage({Key key}) : super(key: key);
 
+  @override
+  _SigninPageState createState() => _SigninPageState();
+}
+
+class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +95,35 @@ class SigninPage extends StatelessWidget {
                         });
                       },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: AppleSignInButton(
+                        onPressed: () {
+                          if (Platform.isIOS) {
+                            signInWithApple().then((user) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MainPage(user: user)));
+                              showMessageBox(context,
+                                  title: "Welcome to Firebase Authentication",
+                                  content: "You've just signed in with Apple");
+                            }).catchError((e) {
+                              print(e);
+                            });
+                          } else {
+                            showMessageBox(context,
+                                title: "Unsupported Platform",
+                                content:
+                                    "Sign in with Apple support only on ios platform");
+                          }
+                        },
+                        cornerRadius: 30,
+                        style: ButtonStyle.white,
+                        type: ButtonType.defaultButton,
+                      ),
+                    )
                   ],
                 ),
               )
