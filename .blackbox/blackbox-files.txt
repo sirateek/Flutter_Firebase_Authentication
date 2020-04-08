@@ -1,1 +1,2 @@
+authentication/android/app/google-services.json
 authentication/ios/Runner/GoogleService-Info.plist

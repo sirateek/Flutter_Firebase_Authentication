@@ -2,3 +2,4 @@
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
 /authentication/ios/Runner/GoogleService-Info.plist
+/authentication/android/app/google-services.json
