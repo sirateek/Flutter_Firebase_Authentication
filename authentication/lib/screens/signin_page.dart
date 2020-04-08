@@ -1,4 +1,6 @@
+import 'package:authentication/components/notification.dart';
 import 'package:authentication/components/signin_button.dart';
+import 'package:authentication/screens/main_page.dart';
 import 'package:authentication/screens/signin_with_email/signin_with_email.dart';
 import 'package:authentication/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,7 +72,15 @@ class SigninPage extends StatelessWidget {
                       icon: FontAwesomeIcons.google,
                       handler: () {
                         signInWithGoogle().then((FirebaseUser user) {
+                          print("Successfully sign-in with google");
                           print(user.uid);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage(user: user)));
+                          showMessageBox(context,
+                              title: "Welcome to Firebase Authentication",
+                              content: "You've just signed in with Google!");
                         }).catchError((e) {
                           print(e);
                         });

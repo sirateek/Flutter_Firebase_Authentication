@@ -13,9 +13,12 @@ void showMessageBox(BuildContext context,
                 Icons.info,
                 color: Colors.green,
               ),
-              Text(
-                title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              Flexible(
+                child: Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  maxLines: 2,
+                ),
               ),
             ],
           ),

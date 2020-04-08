@@ -1,5 +1,6 @@
 import 'package:authentication/components/notification.dart';
 import 'package:authentication/screens/signin_page.dart';
+import 'package:authentication/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,10 @@ class MainPage extends StatelessWidget {
             ),
             onPressed: () {
               final FirebaseAuth _auth = FirebaseAuth.instance;
+
               _auth.signOut().then((data) {
+                return googleSignIn.signOut();
+              }).then((data) {
                 print("Sign-out successfully");
                 Navigator.pushReplacement(
                   context,

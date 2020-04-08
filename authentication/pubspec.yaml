@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  apple_sign_in: ^0.1.0
   google_sign_in: ^4.4.1
   font_awesome_flutter: ^8.8.1
   firebase_auth: ^0.15.5+3
