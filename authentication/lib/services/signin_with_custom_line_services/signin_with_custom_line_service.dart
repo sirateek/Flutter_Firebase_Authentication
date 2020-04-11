@@ -72,7 +72,6 @@ Future<FirebaseUser> signInWithLine() async {
           "https://asia-east2-flutter-firebase-d754b.cloudfunctions.net/FirebaseAuth_generateToken",
           body: reqBody))
       .body;
-  print(firebaseToken);
   AuthResult result = await _auth.signInWithCustomToken(token: firebaseToken);
   return result.user;
 }
