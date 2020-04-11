@@ -5,6 +5,7 @@ import 'package:authentication/components/signin_button.dart';
 import 'package:authentication/screens/main_page.dart';
 import 'package:authentication/screens/signin_with_email/signin_with_email.dart';
 import 'package:authentication/services/signin_with_apple_services/signin_with_apple_services.dart';
+import 'package:authentication/services/signin_with_custom_line_services/signin_with_custom_line_service.dart';
 import 'package:authentication/services/signin_with_google_services/signin_with_google_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,12 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
+  @override
+  void initState() {
+    initLineSdk();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +97,27 @@ class _SigninPageState extends State<SigninPage> {
                           showMessageBox(context,
                               title: "Welcome to Firebase Authentication",
                               content: "You've just signed in with Google!");
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      },
+                    ),
+                    signInButton(
+                      context,
+                      title: "Sign-in with LINE",
+                      icon: FontAwesomeIcons.line,
+                      handler: () {
+                        signInWithLine().then((user) {
+                          print("Successfully sign-in with LINE");
+                          print(user.uid);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage(user: user)));
+                          showMessageBox(context,
+                              title: "Welcome to Firebase Authentication",
+                              content:
+                                  "You've just signed in with Custom Authentication using LINE!");
                         }).catchError((e) {
                           print(e);
                         });

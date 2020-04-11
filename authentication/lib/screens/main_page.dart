@@ -68,7 +68,10 @@ class MainPage extends StatelessWidget {
                 ],
               ),
             ),
-            Text("Your userId is: " + user.uid)
+            Text(
+              "Your userId is: " + user.uid,
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),
